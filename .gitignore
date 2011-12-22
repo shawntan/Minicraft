@@ -4,3 +4,6 @@
 *.swp
 *.out
 *.class
+gen
+bin
+

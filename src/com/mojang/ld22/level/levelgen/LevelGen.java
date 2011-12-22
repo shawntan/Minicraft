@@ -401,7 +401,7 @@ public class LevelGen {
 		return new byte[][] { map, data };
 	}
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		int d = 0;
 		while (true) {
 			int w = 128;
@@ -433,5 +433,5 @@ public class LevelGen {
 			img.setRGB(0, 0, w, h, pixels, 0, w);
 			JOptionPane.showMessageDialog(null, null, "Another", JOptionPane.YES_NO_OPTION, new ImageIcon(img.getScaledInstance(w * 4, h * 4, Image.SCALE_AREA_AVERAGING)));
 		}
-	}
+	}*/
 }

@@ -13,6 +13,9 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.mojang.ld22.entity.Player;
 import com.mojang.ld22.gfx.Color;
 import com.mojang.ld22.gfx.Font;
@@ -25,8 +28,9 @@ import com.mojang.ld22.screen.LevelTransitionMenu;
 import com.mojang.ld22.screen.Menu;
 import com.mojang.ld22.screen.TitleMenu;
 import com.mojang.ld22.screen.WonMenu;
+import com.schneeloch.other.GameActivity;
 
-public class Game extends Canvas implements Runnable {
+public class Game extends Canvas {
 	private static final long serialVersionUID = 1L;
 	private Random random = new Random();
 	public static final String NAME = "Minicraft";
@@ -63,7 +67,9 @@ public class Game extends Canvas implements Runnable {
 
 	public void start() {
 		running = true;
-		new Thread(this).start();
+		//new Thread(this).start();
+		// this is already in a thread
+		//run(activity);
 	}
 
 	public void stop() {
@@ -96,7 +102,7 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
-	private void init() {
+	private void init(Context activity) {
 		int pp = 0;
 		for (int r = 0; r < 6; r++) {
 			for (int g = 0; g < 6; g++) {
@@ -115,8 +121,8 @@ public class Game extends Canvas implements Runnable {
 			}
 		}
 		try {
-			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
-			lightScreen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
+			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(activity.getResources().openRawResource(R.raw.icons))));
+			lightScreen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(activity.getResources().openRawResource(R.raw.icons))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -125,17 +131,28 @@ public class Game extends Canvas implements Runnable {
 		setMenu(new TitleMenu());
 	}
 
-	public void run() {
-		long lastTime = System.nanoTime();
-		double unprocessed = 0;
-		double nsPerTick = 1000000000.0 / 60;
-		int frames = 0;
-		int ticks = 0;
-		long lastTimer1 = System.currentTimeMillis();
+	private long lastTime;
+	private double unprocessed;
+	private double nsPerTick;
+	private int frames;
+	private int ticks;
+	private long lastTimer1;
+	
+	public void startRun(Context activity) {
+		lastTime = System.nanoTime();
+		unprocessed = 0;
+		nsPerTick = 1000000000.0 / 60;
+		frames = 0;
+		ticks = 0;
+		lastTimer1 = System.currentTimeMillis();
 
-		init();
-
-		while (running) {
+		init(activity);
+	}
+	
+	public void iterate(Context context)
+	{
+		if (running)
+		{
 			long now = System.nanoTime();
 			unprocessed += (now - lastTime) / nsPerTick;
 			lastTime = now;
@@ -151,6 +168,7 @@ public class Game extends Canvas implements Runnable {
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				Log.e("Minicraft", e.getMessage());
 			}
 
 			if (shouldRender) {
@@ -329,24 +347,8 @@ public class Game extends Canvas implements Runnable {
 		pendingLevelChange = dir;
 	}
 
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		game.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		game.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-
-		JFrame frame = new JFrame(Game.NAME);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new BorderLayout());
-		frame.add(game, BorderLayout.CENTER);
-		frame.pack();
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-
-		game.start();
-	}
-
+	// NOTE: main moved to GameActivity
+	
 	public void won() {
 		wonTimer = 60 * 3;
 		hasWon = true;
