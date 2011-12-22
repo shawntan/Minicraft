@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import com.mojang.ld22.Game;
+import com.mojang.ld22.InputHandler;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -25,6 +26,7 @@ public class GameThread extends Thread {
 	private final SurfaceHolder surfaceHolder;
 	private final Context context;
 	private final Handler handler;
+	private InputHandler inputHandler;
 	
 	private boolean run;
 	
@@ -77,6 +79,7 @@ public class GameThread extends Thread {
 	public void run() {
 		Game game = new Game();
 		game.start();
+		inputHandler = game.getInputHandler();
 		
 		game.startRun(context);
 		while (run)
@@ -169,25 +172,9 @@ public class GameThread extends Thread {
 	{
 		setState(STATE_RUNNING);
 	}
-	
-	public boolean doKeyDown(int keyCode, KeyEvent msg)
+
+	public InputHandler getInputHandler()
 	{
-		synchronized (surfaceHolder) {
-			//TODO
-			return false;
-		}
-	}
-	
-	public boolean doKeyUp(int keyCode, KeyEvent msg)
-	{
-		synchronized (surfaceHolder) {
-			//TODO
-			return false;
-		}
-	}
-	
-	private void doDraw(Canvas canvas)
-	{
-		//TODO draw stuff here
+		return inputHandler;
 	}
 }

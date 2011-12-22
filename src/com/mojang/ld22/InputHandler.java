@@ -1,11 +1,9 @@
 package com.mojang.ld22;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputHandler implements KeyListener {
+public class InputHandler {
 	public class Key {
 		public int presses, absorbs;
 		public boolean down, clicked;
@@ -55,17 +53,50 @@ public class InputHandler implements KeyListener {
 	}
 
 	public InputHandler(Game game) {
-		game.addKeyListener(this);
+//		game.addKeyListener(this);
 	}
-
+	
+	public static final int UP = 1;
+	public static final int DOWN = 2;
+	public static final int LEFT = 3;
+	public static final int RIGHT = 4;
+	public static final int ATTACK = 5;
+	public static final int MENU = 6;
+	
+	public void keyEvent(int keyId, boolean isDown)
+	{
+		switch (keyId)
+		{
+		case UP:
+			up.toggle(isDown);
+			break;
+		case DOWN:
+			down.toggle(isDown);
+			break;
+		case LEFT:
+			left.toggle(isDown);
+			break;
+		case RIGHT:
+			right.toggle(isDown);
+			break;
+		case MENU:
+			menu.toggle(isDown);
+			break;
+		case ATTACK:
+			attack.toggle(isDown);
+			break;
+			
+		}
+	}
+/*
 	public void keyPressed(KeyEvent ke) {
 		toggle(ke, true);
 	}
 
 	public void keyReleased(KeyEvent ke) {
 		toggle(ke, false);
-	}
-
+	}*/
+/*
 	private void toggle(KeyEvent ke, boolean pressed) {
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD8) up.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD2) down.toggle(pressed);
@@ -94,5 +125,5 @@ public class InputHandler implements KeyListener {
 	}
 
 	public void keyTyped(KeyEvent ke) {
-	}
+	}*/
 }

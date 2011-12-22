@@ -36,7 +36,7 @@ public class Game extends Canvas {
 	public static final String NAME = "Minicraft";
 	public static final int HEIGHT = 120;
 	public static final int WIDTH = 160;
-	private static final int SCALE = 3;
+	private static final int SCALE = 2;
 
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -352,5 +352,9 @@ public class Game extends Canvas {
 	public void won() {
 		wonTimer = 60 * 3;
 		hasWon = true;
+	}
+
+	public InputHandler getInputHandler() {
+		return input;
 	}
 }
