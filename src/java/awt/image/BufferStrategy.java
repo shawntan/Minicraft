@@ -2,15 +2,15 @@ package java.awt.image;
 
 import java.awt.Graphics;
 
+import android.graphics.Canvas;
+
 public class BufferStrategy {
 
-	public Graphics getDrawGraphics() {
-		// TODO Auto-generated method stub
-		return null;
+	public Graphics getDrawGraphics(Canvas canvas) {
+		return new Graphics(canvas);
 	}
 
 	public void show() {
-		// TODO Auto-generated method stub
 		
 	}
 

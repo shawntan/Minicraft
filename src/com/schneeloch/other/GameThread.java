@@ -92,7 +92,7 @@ public class GameThread extends Thread {
 					if (mode == STATE_RUNNING)
 					{
 						// update game state here
-						game.iterate(context);
+						game.iterate(context, canvas);
 						//game.doDraw(canvas);
 					}
 				}

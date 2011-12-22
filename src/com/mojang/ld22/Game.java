@@ -149,7 +149,7 @@ public class Game extends Canvas {
 		init(activity);
 	}
 	
-	public void iterate(Context context)
+	public void iterate(Context context, android.graphics.Canvas canvas)
 	{
 		if (running)
 		{
@@ -173,7 +173,7 @@ public class Game extends Canvas {
 
 			if (shouldRender) {
 				frames++;
-				render();
+				render(canvas);
 			}
 
 			if (System.currentTimeMillis() - lastTimer1 > 1000) {
@@ -228,7 +228,7 @@ public class Game extends Canvas {
 
 	}
 
-	public void render() {
+	public void render(android.graphics.Canvas canvas) {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
@@ -270,11 +270,11 @@ public class Game extends Canvas {
 			}
 		}
 
-		Graphics g = bs.getDrawGraphics();
+		Graphics g = bs.getDrawGraphics(canvas);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		int ww = WIDTH * 3;
-		int hh = HEIGHT * 3;
+		int ww = WIDTH * SCALE;
+		int hh = HEIGHT * SCALE;
 		int xo = (getWidth() - ww) / 2;
 		int yo = (getHeight() - hh) / 2;
 		g.drawImage(image, xo, yo, ww, hh, null);

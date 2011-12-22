@@ -35,16 +35,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback
 		return thread;
 	}
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		return thread.doKeyDown(keyCode, event);
-	}
-	
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		return thread.doKeyUp(keyCode, event);
-	}
 	
 	@Override
 	public void onWindowFocusChanged(boolean hasWindowFocus) {
