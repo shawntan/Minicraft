@@ -9,7 +9,7 @@ import com.mojang.ld22.gfx.Font;
 import com.mojang.ld22.gfx.Screen;
 
 public class Menu {
-	protected Game game;
+	transient protected Game game;
 	protected InputHandler input;
 
 	public void init(Game game, InputHandler input) {

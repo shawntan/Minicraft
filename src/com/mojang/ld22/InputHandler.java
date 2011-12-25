@@ -53,9 +53,10 @@ public class InputHandler implements KeyListener {
 			keys.get(i).tick();
 		}
 	}
-
+	transient private Game game;
 	public InputHandler(Game game) {
 		game.addKeyListener(this);
+		this.game = game;
 	}
 
 	public void keyPressed(KeyEvent ke) {
@@ -71,10 +72,12 @@ public class InputHandler implements KeyListener {
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD2) down.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD4) left.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD6) right.toggle(pressed);
+		/*
 		if (ke.getKeyCode() == KeyEvent.VK_W) up.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_S) down.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_A) left.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_D) right.toggle(pressed);
+		*/
 		if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_LEFT) left.toggle(pressed);
@@ -91,6 +94,9 @@ public class InputHandler implements KeyListener {
 
 		if (ke.getKeyCode() == KeyEvent.VK_X) menu.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_C) attack.toggle(pressed);
+		
+		if(ke.getKeyCode() == KeyEvent.VK_S) game.save();
+		if(ke.getKeyCode() == KeyEvent.VK_L) game.load();
 	}
 
 	public void keyTyped(KeyEvent ke) {

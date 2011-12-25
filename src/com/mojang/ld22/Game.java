@@ -7,7 +7,14 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -30,8 +37,8 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private Random random = new Random();
 	public static final String NAME = "Minicraft";
-	public static final int HEIGHT = 120;
-	public static final int WIDTH = 160;
+	public static final int HEIGHT = 240;
+	public static final int WIDTH = 240;
 	private static final int SCALE = 3;
 
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -124,7 +131,7 @@ public class Game extends Canvas implements Runnable {
 		resetGame();
 		setMenu(new TitleMenu());
 	}
-
+	final private static boolean DEBUG = false;
 	public void run() {
 		long lastTime = System.nanoTime();
 		double unprocessed = 0;
@@ -141,7 +148,7 @@ public class Game extends Canvas implements Runnable {
 			lastTime = now;
 			boolean shouldRender = true;
 			while (unprocessed >= 1) {
-				ticks++;
+				if(DEBUG) ticks++;
 				tick();
 				unprocessed -= 1;
 				shouldRender = true;
@@ -154,11 +161,11 @@ public class Game extends Canvas implements Runnable {
 			}
 
 			if (shouldRender) {
-				frames++;
+				if(DEBUG) frames++;
 				render();
 			}
 
-			if (System.currentTimeMillis() - lastTimer1 > 1000) {
+			if (DEBUG && System.currentTimeMillis() - lastTimer1 > 1000) {
 				lastTimer1 += 1000;
 				System.out.println(ticks + " ticks, " + frames + " fps");
 				frames = 0;
@@ -351,4 +358,86 @@ public class Game extends Canvas implements Runnable {
 		wonTimer = 60 * 3;
 		hasWon = true;
 	}
+
+	public void save() {
+		ObjectOutputStream oos = null;
+		try {
+			State state = new State();
+			state.player = this.player;
+			state.levels = this.levels;
+			state.playerDeadTime = this.playerDeadTime;
+			state.wonTimer = this.wonTimer;
+			state.gameTime = this.gameTime;
+			state.hasWon = this.hasWon;
+			state.currentLevel = this.currentLevel;			
+			File save = new File("save");
+			oos = new ObjectOutputStream(new FileOutputStream(save));
+			oos.writeObject(state);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (oos != null)
+				try {
+					oos.close();
+				} catch (IOException e) {}
+		}
+
+	}
+
+	public void load() {
+		ObjectInputStream ois = null;
+		try {
+			level.remove(player);
+			File save = new File("save");
+			ois = new ObjectInputStream(new FileInputStream(save));
+			State state = (State)ois.readObject();
+			this.player = state.player;
+			this.levels = state.levels;
+			this.player.game = this;
+			this.player.input = this.input;
+			
+
+			this.playerDeadTime = state.playerDeadTime;
+			this.wonTimer =state.wonTimer;
+			this.gameTime = state.gameTime;
+			this.hasWon = state.hasWon;
+			this.currentLevel = state.currentLevel;	
+			
+			level = levels[currentLevel];
+			//player.findStartPos(level);
+			level.add(player);
+			
+			
+			render();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (ois != null)
+				try {
+					ois.close();
+				} catch (IOException e) {}
+		}
+
+	}
+
+}
+class State implements Serializable {
+	int playerDeadTime;
+	int wonTimer;
+	int gameTime;
+	boolean hasWon;
+	int currentLevel;
+	Player player;
+	Level[] levels;
 }

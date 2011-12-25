@@ -1,5 +1,6 @@
 package com.mojang.ld22.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.mojang.ld22.Game;
@@ -10,20 +11,18 @@ import com.mojang.ld22.gfx.Screen;
 import com.mojang.ld22.item.FurnitureItem;
 import com.mojang.ld22.item.Item;
 import com.mojang.ld22.item.PowerGloveItem;
-import com.mojang.ld22.item.ResourceItem;
-import com.mojang.ld22.item.ToolItem;
-import com.mojang.ld22.item.ToolType;
-import com.mojang.ld22.item.resource.Resource;
 import com.mojang.ld22.level.Level;
 import com.mojang.ld22.level.tile.Tile;
 import com.mojang.ld22.screen.InventoryMenu;
 import com.mojang.ld22.sound.Sound;
 
-public class Player extends Mob {
-	private InputHandler input;
+public class Player extends Mob implements Serializable {
+	transient public Game game;
+	transient public InputHandler input;
+	
 	private int attackTime, attackDir;
 
-	public Game game;
+	
 	public Inventory inventory = new Inventory();
 	public Item attackItem;
 	public Item activeItem;

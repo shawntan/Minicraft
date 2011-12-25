@@ -1,5 +1,6 @@
 package com.mojang.ld22.level;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +17,7 @@ import com.mojang.ld22.gfx.Screen;
 import com.mojang.ld22.level.levelgen.LevelGen;
 import com.mojang.ld22.level.tile.Tile;
 
-public class Level {
+public class Level implements Serializable {
 	private Random random = new Random();
 
 	public int w, h;
@@ -30,9 +31,10 @@ public class Level {
 	public int sandColor = 550;
 	private int depth;
 	public int monsterDensity = 8;
-
+	
+	//can use linkedlist instead off arraylist?
 	public List<Entity> entities = new ArrayList<Entity>();
-	private Comparator<Entity> spriteSorter = new Comparator<Entity>() {
+	public static Comparator<Entity> spriteSorter = new Comparator<Entity>() {
 		public int compare(Entity e0, Entity e1) {
 			if (e1.y < e0.y) return +1;
 			if (e1.y > e0.y) return -1;
@@ -257,7 +259,7 @@ public class Level {
 			}
 		}
 	}
-
+	//modify for linkedlist?
 	public void tick() {
 		trySpawn(1);
 
