@@ -16,7 +16,7 @@ import com.mojang.ld22.level.tile.Tile;
 import com.mojang.ld22.screen.InventoryMenu;
 import com.mojang.ld22.sound.Sound;
 
-public class Player extends Mob implements Serializable {
+public class Player extends Mob {
 	transient public Game game;
 	transient public InputHandler input;
 	

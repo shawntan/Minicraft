@@ -1,6 +1,8 @@
 package com.mojang.ld22.item.resource;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.ld22.entity.Player;
 import com.mojang.ld22.gfx.Color;
@@ -8,6 +10,7 @@ import com.mojang.ld22.level.Level;
 import com.mojang.ld22.level.tile.Tile;
 
 public class Resource implements Serializable{
+	public static final List<Resource> ids = new ArrayList<Resource>();
 	public static Resource wood = new Resource("Wood", 1 + 4 * 32, Color.get(-1, 200, 531, 430));
 	public static Resource stone = new Resource("Stone", 2 + 4 * 32, Color.get(-1, 111, 333, 555));
 	public static Resource flower = new PlantableResource("Flower", 0 + 4 * 32, Color.get(-1, 10, 444, 330), Tile.flower, Tile.grass);
@@ -35,12 +38,16 @@ public class Resource implements Serializable{
 	public final String name;
 	public final int sprite;
 	public final int color;
-
+	
+	public final int id;
+	
 	public Resource(String name, int sprite, int color) {
 		if (name.length() > 6) throw new RuntimeException("Name cannot be longer than six characters!");
 		this.name = name;
 		this.sprite = sprite;
 		this.color = color;
+		this.id = Resource.ids.size();
+		ids.add(this);
 	}
 
 	public boolean interactOn(Tile tile, Level level, int xt, int yt, Player player, int attackDir) {

@@ -1,5 +1,9 @@
 package com.mojang.ld22.item;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import com.mojang.ld22.entity.ItemEntity;
 import com.mojang.ld22.entity.Player;
 import com.mojang.ld22.gfx.Color;
@@ -60,5 +64,14 @@ public class ResourceItem extends Item {
 	public boolean isDepleted() {
 		return count <= 0;
 	}
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.writeInt(resource.id);
+		oos.writeInt(count);
+	}
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		this.resource = Resource.ids.get(ois.readInt());
+		this.count = ois.readInt();
+	}
+	
 
 }

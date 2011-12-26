@@ -128,7 +128,7 @@ public class Level implements Serializable {
 
 	private List<Entity> rowSprites = new ArrayList<Entity>();
 
-	public Player player;
+	transient public Player player;
 
 	public void renderSprites(Screen screen, int xScroll, int yScroll) {
 		int xo = xScroll >> 4;

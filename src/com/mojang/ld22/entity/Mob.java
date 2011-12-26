@@ -8,7 +8,7 @@ import com.mojang.ld22.level.Level;
 import com.mojang.ld22.level.tile.Tile;
 import com.mojang.ld22.sound.Sound;
 
-public class Mob extends Entity implements Serializable {
+public class Mob extends Entity {
 	protected int walkDist = 0;
 	protected int dir = 0;
 	public int hurtTime = 0;

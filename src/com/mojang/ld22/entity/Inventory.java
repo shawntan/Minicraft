@@ -1,5 +1,6 @@
 package com.mojang.ld22.entity;
 
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,4 +68,5 @@ public class Inventory implements Serializable {
 		}
 		return 0;
 	}
+
 }

@@ -68,6 +68,7 @@ public class InputHandler implements KeyListener {
 	}
 
 	private void toggle(KeyEvent ke, boolean pressed) {
+		
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD8) up.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD2) down.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_NUMPAD4) left.toggle(pressed);
@@ -95,8 +96,8 @@ public class InputHandler implements KeyListener {
 		if (ke.getKeyCode() == KeyEvent.VK_X) menu.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_C) attack.toggle(pressed);
 		
-		if(ke.getKeyCode() == KeyEvent.VK_S) game.save();
-		if(ke.getKeyCode() == KeyEvent.VK_L) game.load();
+		if(ke.getKeyCode() == KeyEvent.VK_S && pressed) game.save();
+		if(ke.getKeyCode() == KeyEvent.VK_L && pressed) game.load();
 	}
 
 	public void keyTyped(KeyEvent ke) {

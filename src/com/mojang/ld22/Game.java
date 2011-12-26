@@ -46,7 +46,7 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	private Screen screen;
 	private Screen lightScreen;
-	private InputHandler input = new InputHandler(this);
+	transient private InputHandler input = new InputHandler(this);
 
 	private int[] colors = new int[256];
 	private int tickCount = 0;
@@ -63,6 +63,10 @@ public class Game extends Canvas implements Runnable {
 	private int wonTimer = 0;
 	public boolean hasWon = false;
 
+	private Thread thread;
+	public Game() {
+		init();
+	}
 	public void setMenu(Menu menu) {
 		this.menu = menu;
 		if (menu != null) menu.init(this, input);
@@ -70,11 +74,22 @@ public class Game extends Canvas implements Runnable {
 
 	public void start() {
 		running = true;
-		new Thread(this).start();
+		if(thread == null) {
+			thread = new Thread(this);
+			thread.start();
+		}
 	}
 
 	public void stop() {
 		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			thread  = null;
+		}
 	}
 
 	public void resetGame() {
@@ -101,6 +116,7 @@ public class Game extends Canvas implements Runnable {
 		for (int i = 0; i < 5; i++) {
 			levels[i].trySpawn(5000);
 		}
+
 	}
 
 	private void init() {
@@ -132,16 +148,19 @@ public class Game extends Canvas implements Runnable {
 		setMenu(new TitleMenu());
 	}
 	final private static boolean DEBUG = false;
+	long lastTime;
+	double unprocessed;
+	double nsPerTick;
+	int frames;
+	int ticks;
+	long lastTimer1;
 	public void run() {
-		long lastTime = System.nanoTime();
-		double unprocessed = 0;
-		double nsPerTick = 1000000000.0 / 60;
-		int frames = 0;
-		int ticks = 0;
-		long lastTimer1 = System.currentTimeMillis();
-
-		init();
-
+		lastTime = System.nanoTime();
+		unprocessed = 0;
+		nsPerTick = 1000000000.0 / 60;
+		frames = 0;
+		ticks = 0;
+		lastTimer1 = System.currentTimeMillis();
 		while (running) {
 			long now = System.nanoTime();
 			unprocessed += (now - lastTime) / nsPerTick;
@@ -167,7 +186,7 @@ public class Game extends Canvas implements Runnable {
 
 			if (DEBUG && System.currentTimeMillis() - lastTimer1 > 1000) {
 				lastTimer1 += 1000;
-				System.out.println(ticks + " ticks, " + frames + " fps");
+				System.out.println(Thread.currentThread().getName()+":"+ticks + " ticks, " + frames + " fps");
 				frames = 0;
 				ticks = 0;
 			}
@@ -360,7 +379,11 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void save() {
+		if(this.menu != null) return;
 		ObjectOutputStream oos = null;
+		Font.draw("Saving...", screen, 10, 10, Color.get(5, 555, 555, 555));
+		stop();
+
 		try {
 			State state = new State();
 			state.player = this.player;
@@ -385,34 +408,30 @@ public class Game extends Canvas implements Runnable {
 					oos.close();
 				} catch (IOException e) {}
 		}
+		start();
 
 	}
 
 	public void load() {
 		ObjectInputStream ois = null;
+		stop();
 		try {
 			level.remove(player);
+			this.player = null;
 			File save = new File("save");
 			ois = new ObjectInputStream(new FileInputStream(save));
 			State state = (State)ois.readObject();
 			this.player = state.player;
 			this.levels = state.levels;
+			this.level = levels[currentLevel];
+			this.level.player = player;
 			this.player.game = this;
 			this.player.input = this.input;
-			
-
 			this.playerDeadTime = state.playerDeadTime;
 			this.wonTimer =state.wonTimer;
 			this.gameTime = state.gameTime;
 			this.hasWon = state.hasWon;
-			this.currentLevel = state.currentLevel;	
-			
-			level = levels[currentLevel];
-			//player.findStartPos(level);
-			level.add(player);
-			
-			
-			render();
+			this.currentLevel = state.currentLevel;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -428,6 +447,8 @@ public class Game extends Canvas implements Runnable {
 					ois.close();
 				} catch (IOException e) {}
 		}
+		setMenu(null);
+		start();
 
 	}
 

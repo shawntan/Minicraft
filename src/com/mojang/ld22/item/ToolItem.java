@@ -1,5 +1,8 @@
 package com.mojang.ld22.item;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import com.mojang.ld22.entity.Entity;
@@ -7,9 +10,10 @@ import com.mojang.ld22.entity.ItemEntity;
 import com.mojang.ld22.gfx.Color;
 import com.mojang.ld22.gfx.Font;
 import com.mojang.ld22.gfx.Screen;
+import com.mojang.ld22.item.resource.Resource;
 
 public class ToolItem extends Item {
-	private Random random = new Random();
+	private static Random random = new Random();
 
 	public static final int MAX_LEVEL = 5;
 	public static final String[] LEVEL_NAMES = { //
@@ -79,4 +83,15 @@ public class ToolItem extends Item {
 		}
 		return false;
 	}
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		System.out.println(type.name);
+		oos.writeInt(type.id);
+		oos.writeInt(level);
+	}
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		this.type = ToolType.ids.get(ois.readInt());
+		this.level = ois.readInt();
+	}
+	
+	
 }
