@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Minicraft</string>
+    <string name="up_name">Up</string><string name="down_name">Down</string><string name="left_name">Left</string><string name="right_name">Right</string><string name="menu_name">Menu</string><string name="attack_name">Attack</string>
+
+    
+</resources>

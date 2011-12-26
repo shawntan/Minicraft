@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.mojang.ld22.GameView
+      android:layout_height="fill_parent"
+      android:layout_width="fill_parent"
+      android:id="@+id/gameView"
+      android:layout_gravity="center_horizontal"
+      android:background="#000000"
+    />
+
+        <ImageButton
+            android:id="@+id/buttonUp"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_above="@+id/buttonDown"
+            android:layout_alignLeft="@+id/buttonDown"
+            android:background="@drawable/up"
+			android:contentDescription="@string/up_name" />
+
+        <ImageButton
+            android:id="@+id/buttonLeft"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/left"
+            android:contentDescription="@string/left_name" />
+
+        <ImageButton
+            android:id="@+id/buttonRight"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_toRightOf="@+id/buttonDown"
+            android:layout_alignTop="@+id/buttonDown"
+            android:background="@drawable/right"
+            android:contentDescription="@string/right_name" />            
+
+        <ImageButton
+            android:id="@+id/buttonDown"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_toRightOf="@+id/buttonLeft"
+            android:layout_alignTop="@+id/buttonLeft"
+            android:background="@drawable/down"
+            android:contentDescription="@string/down_name" />            
+
+        <Button
+            android:id="@+id/buttonAttack"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="@string/attack_name" />
+
+        <Button
+            android:id="@+id/buttonMenu"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/buttonAttack"
+            android:layout_alignTop="@+id/buttonAttack"
+            android:text="@string/menu_name" />
+
+</RelativeLayout>
